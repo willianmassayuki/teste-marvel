@@ -1,0 +1,18 @@
+@use './variables';
+
+@mixin center($direcao) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: ($direcao);
+}
+
+@mixin badge($bg-color) {
+    background-color: $bg-color;
+    color: variables.$card-bg-color;
+    border-radius: 1rem;
+    padding: 5px 10px 2px 10px;
+    text-decoration-line: none;
+    font-size: .7rem;
+}
+

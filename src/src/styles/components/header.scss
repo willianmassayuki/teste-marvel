@@ -1,0 +1,14 @@
+@use '../variables';
+
+.header {
+    background-color: variables.$primary-color;
+    background-image: url(variables.$bg-img-mobile);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 150px;
+    margin-bottom: 50px;
+
+    @media screen and (min-width: 768px) {
+        background-image: url(variables.$bg-img-desktop);
+      }
+}
