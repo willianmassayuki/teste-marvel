@@ -1,0 +1,38 @@
+@use "../variables";
+@use "../mixins";
+
+.searchbar {
+  @include mixins.center(row, start);
+  background-color: variables.$secondary-color;
+  height: 4rem;
+  width: 60%;
+  border-radius: 2rem;
+  margin: 0 auto;
+
+  img {
+    margin: 0 2rem;
+  }
+
+  input {
+    border: none;
+    height: 2rem;
+    width: 90%;
+    background-color: transparent;
+    font-size: 1rem;
+    color: variables.$sec-text;
+
+    &::placeholder {
+      color: variables.$primary-color;
+      font-weight: 400;
+      font-size: 1rem;
+    }
+
+    &:focus {
+      outline: 0;
+    }
+
+    &::-webkit-search-cancel-button {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,12 @@
+@use "../variables";
+@use "../mixins";
+
+.header {
+  margin: 0 2rem 2.5rem 2rem;
+  @include mixins.center(column, space-between);
+  img,
+  h1,
+  p {
+    margin-bottom: 1rem;
+  }
+}
