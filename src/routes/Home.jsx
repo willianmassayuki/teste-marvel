@@ -1,3 +1,4 @@
+import "../styles/routes.scss";
 import React from "react";
 import Header from "../components/Header";
 import SearchInput from "../components/SearchInput";
@@ -7,49 +8,154 @@ import api from "../services/api";
 const Home = () => {
   //Texto pesquisado
   const [text, setText] = useState("");
+
   //Dados da API
   const [dados, setDados] = useState(null);
+
   //Controle de ordenação
   const [ordemAlfabetica, setOrdemAlfabetica] = useState(true);
+  const [favoritos, setFavoritos] = useState([]);
+  const [mostraFavoritos, setMostraFavoritos] = useState(true);
 
+  //Muda o sentido da ordem alfabética
   function mudaOrdem() {
     setOrdemAlfabetica(!ordemAlfabetica);
   }
 
+  //Muda visualização entre favoritos e o padrão
+  function handleFavoritos() {
+    setMostraFavoritos(!mostraFavoritos);
+  }
+
+  // Adiciona ou retira um id e personagem da lista de favoritos
+  function toggleFav(id) {
+    if (favoritos.includes(id)) {
+      setFavoritos(favoritos.filter((favId) => favId !== id));
+    } else {
+      setFavoritos([...favoritos, id]);
+    }
+  }
+
+  // Se existirem dados armazenados, converter de volta para objeto e definir no estado favoritos
+  useEffect(() => {
+    const dadosArmazenados = localStorage.getItem("favoritos");
+    if (dadosArmazenados) {
+      setFavoritos(JSON.parse(dadosArmazenados));
+      console.log(dadosArmazenados);
+    }
+  }, []);
+
+  //Atualização do localstorage toda vez que favoritos for alterado
+  useEffect(() => {
+    localStorage.setItem("favoritos", JSON.stringify(favoritos));
+    console.log(favoritos);
+  }, [favoritos]);
+
   // Carrega sempre que o text sofrer uma alteração
   useEffect(() => {
-    api
-      .get("characters?", {
-        params: {
-          nameStartsWith: text ? `${text}` : null,
-          orderBy: ordemAlfabetica ? "name" : "-name",
-        },
-      })
-      //text ? `nameStartsWith=${text}` : null)
-      .then((response) => {
-        setDados(response.data);
-        console.log(dados);
-      })
-      .catch((err) => {
-        console.error("ops! ocorreu um erro" + err);
-      });
-  }, [text, ordemAlfabetica]);
+    ///Fazer uma condicional para caso o mostraFavoritos for TRUE para que
+    //seja feita uma requisição com BASE em cada ID presente dentro do array favoritos
+    ///e Somar ao estado dados, de forma que no final tenha dados com todos os personagens marcados como favorito
+
+    if (mostraFavoritos && favoritos.length > 0) {
+      // Criar uma função assíncrona para poder usar o await na chamada da API
+      async function fetchFavoritosData() {
+        try {
+          // Inicializar um array para guardar os dados de favoritos
+          const favoritosData = [];
+
+          // Fazer uma requisição para cada ID presente no array favoritos
+          for (const id of favoritos) {
+            const response = await api.get(`characters/${id}`);
+            favoritosData.push(response.data);
+          }
+
+          // Atualizar o estado dos dados com os dados de favoritos obtidos
+          setDados((prevDados) => ({
+            data: {
+              ...prevDados.data,
+              results: [...favoritosData.map((item) => item.data.results[0])],
+            },
+          }));
+          console.log(dados);
+          //setDados(favoritosData);
+          //console.log(favoritosData[0].data?.results);
+        } catch (error) {
+          console.error(
+            "Ops! Ocorreu um erro ao obter dados de favoritos:",
+            error
+          );
+        }
+      }
+      // Chamar a função que faz as requisições para cada ID de favoritos
+      fetchFavoritosData();
+    } else {
+      api
+        .get("characters?", {
+          params: {
+            nameStartsWith: text ? `${text}` : null,
+            orderBy: ordemAlfabetica ? "name" : "-name",
+          },
+        })
+
+        .then((response) => {
+          setDados(response.data);
+          //console.log(dados);
+        })
+        .catch((err) => {
+          console.error("ops! ocorreu um erro" + err);
+        });
+    }
+  }, [text, ordemAlfabetica, mostraFavoritos]);
   return (
     <>
       <Header />
       <SearchInput value={text} onChange={(search) => setText(search)} />
-      <button onClick={() => mudaOrdem()}>A-Z</button>
-      <ul>
-        {dados?.data?.results?.map((item) => (
-          <li key={item?.id}>
-            <img
-              src={`${item?.thumbnail?.path}.${item?.thumbnail?.extension}`}
-              alt={`${item?.name}`}
-            />
-            <span>{item?.name}</span>
-          </li>
-        ))}
-      </ul>
+      <div className="main-container">
+        <div className="actions-container">
+          <p>Encontrados {dados?.data?.results?.length} heróis</p>
+          <button onClick={() => mudaOrdem()}>Ordenar por nome - A/Z</button>
+          <button onClick={() => handleFavoritos()}>
+            <img src="/assets/icones/heart/Path.svg" alt="Mostrar Favoritos" />
+          </button>
+        </div>
+        <div className="heroes-container">
+          {dados ? (
+            <ul>
+              {dados?.data?.results?.map((item) => (
+                <li key={item?.id}>
+                  <img
+                    src={`${item?.thumbnail?.path}.${item?.thumbnail?.extension}`}
+                    alt={`${item?.name}`}
+                  />
+                  <span>{item?.name}</span>
+
+                  {favoritos.includes(item?.id) ? (
+                    <button onClick={() => toggleFav(item?.id)}>
+                      <img
+                        src="/assets/icones/heart/Path.svg"
+                        alt="Mostrar Favoritos"
+                      />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => toggleFav(item?.id)}
+                      disabled={favoritos.length >= 5}
+                    >
+                      <img
+                        src="/assets/icones/heart/Path Copy 2@1,5x.svg"
+                        alt="Mostrar Favoritos"
+                      />
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <h3>Carregando...</h3>
+          )}
+        </div>
+      </div>
     </>
   );
 };
