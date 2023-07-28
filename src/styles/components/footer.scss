@@ -1,0 +1,7 @@
+@use "../variables";
+
+.footer {
+  background-color: variables.$primary-color;
+  width: 100%;
+  height: 5rem;
+}

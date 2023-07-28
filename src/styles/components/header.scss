@@ -2,11 +2,21 @@
 @use "../mixins";
 
 .header {
-  margin: 0 2rem 2.5rem 2rem;
+  margin-bottom: 2.5rem;
   @include mixins.center(column, space-between);
   img,
   h1,
   p {
     margin-bottom: 1rem;
+  }
+
+  @media screen and (max-width: variables.$lm-size) {
+    p {
+      width: 70%;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+    }
   }
 }

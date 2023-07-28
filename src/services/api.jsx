@@ -12,8 +12,6 @@ const api = axios.create({
     ts: time,
     apikey: publicKey,
     hash,
-    limit: 20,
-    //nameStartsWith: "spi",
   },
 });
 

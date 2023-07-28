@@ -1,0 +1,117 @@
+@use "./variables";
+@use "./mixins";
+
+.main-container {
+  @include mixins.center(column, space-between);
+  margin: 0 8rem 4rem 8rem;
+  min-height: 60vh;
+  @media screen and (max-width: variables.$m-size) {
+    margin: 0 2rem 2rem 2rem;
+  }
+  button {
+    background-color: transparent;
+    outline: 0;
+    border: none;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .actions-container {
+    @include mixins.center(row, none);
+    margin-bottom: 3rem;
+    width: 80%;
+
+    @media screen and (max-width: variables.$m-size) {
+      flex-direction: column-reverse;
+      align-items: end;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    p {
+      display: inline;
+      margin-right: auto;
+      @media screen and (max-width: variables.$m-size) {
+        margin: 0;
+      }
+    }
+
+    button {
+      display: flex;
+      align-items: center;
+      margin-left: 2rem;
+      color: variables.$primary-color;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    span {
+      margin-left: 1rem;
+    }
+
+    img {
+      margin-left: 1rem;
+      transition: 0.3s;
+      &:hover {
+        scale: 1.1;
+      }
+    }
+  }
+  .heroes-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    ul {
+      display: grid;
+      grid-template-columns: repeat(4, 360px);
+      gap: 1.5rem;
+      @media screen and (max-width: variables.$l-size) {
+        grid-template-columns: repeat(3, 360px);
+      }
+      @media screen and (max-width: variables.$lm-size) {
+        grid-template-columns: repeat(2, 360px);
+      }
+      @media screen and (max-width: variables.$m-size) {
+        grid-template-columns: repeat(1, 320px);
+      }
+
+      .hero-card {
+        width: 100%;
+        @include mixins.center(column, space-between);
+        list-style: none;
+        margin-bottom: 1rem;
+
+        li {
+          width: 100%;
+          height: 100%;
+          .card-img {
+            width: 100%;
+            height: 350px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            img {
+              border-bottom: 0.25rem solid variables.$primary-color;
+              width: 100%;
+              height: 100%;
+            }
+          }
+
+          .card-footer {
+            width: 100%;
+            margin-bottom: 1rem;
+            @include mixins.center(row, space-between);
+
+            span {
+              font-weight: 700;
+              font-size: 1.5rem;
+              color: variables.$primary-text;
+            }
+          }
+        }
+      }
+    }
+  }
+}

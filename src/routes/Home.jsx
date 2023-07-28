@@ -1,11 +1,15 @@
-import "../styles/routes.scss";
+import "../styles/home.scss";
 import React from "react";
 import Header from "../components/Header";
 import SearchInput from "../components/SearchInput";
 import { useState, useEffect } from "react";
 import api from "../services/api";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const Home = () => {
+  //Para navegar até a página /character
+  const navigate = useNavigate();
+
   //Texto pesquisado
   const [text, setText] = useState("");
 
@@ -95,12 +99,13 @@ const Home = () => {
           params: {
             nameStartsWith: text ? `${text}` : null,
             orderBy: ordemAlfabetica ? "name" : "-name",
+            limit: 20,
           },
         })
 
         .then((response) => {
           setDados(response.data);
-          //console.log(dados);
+          console.log(dados);
         })
         .catch((err) => {
           console.error("ops! ocorreu um erro" + err);
@@ -114,41 +119,73 @@ const Home = () => {
       <div className="main-container">
         <div className="actions-container">
           <p>Encontrados {dados?.data?.results?.length} heróis</p>
-          <button onClick={() => mudaOrdem()}>Ordenar por nome - A/Z</button>
+          <button onClick={() => mudaOrdem()}>
+            <img
+              src="/assets/icones/heroi/noun_Superhero_2227044@1,5x.svg"
+              alt="Hero icon"
+            />
+            <span>Ordenar por nome - A/Z</span>
+            {ordemAlfabetica ? (
+              <img src="/assets/toggle/Group 6@1,5x.svg" alt="A a Z Toggle" />
+            ) : (
+              <img src="/assets/toggle/Group 2.svg" alt="A a Z Toggle" />
+            )}
+          </button>
           <button onClick={() => handleFavoritos()}>
-            <img src="/assets/icones/heart/Path.svg" alt="Mostrar Favoritos" />
+            {mostraFavoritos ? (
+              <img
+                src="/assets/icones/heart/Path.svg"
+                alt="Mostrar Favoritos"
+              />
+            ) : (
+              <img
+                src="/assets/icones/heart/Path Copy 7.svg"
+                alt="Mostrar Favoritos"
+              />
+            )}
+            <span>Somente Favoritos</span>
           </button>
         </div>
         <div className="heroes-container">
           {dados ? (
             <ul>
               {dados?.data?.results?.map((item) => (
-                <li key={item?.id}>
-                  <img
-                    src={`${item?.thumbnail?.path}.${item?.thumbnail?.extension}`}
-                    alt={`${item?.name}`}
-                  />
-                  <span>{item?.name}</span>
-
-                  {favoritos.includes(item?.id) ? (
-                    <button onClick={() => toggleFav(item?.id)}>
-                      <img
-                        src="/assets/icones/heart/Path.svg"
-                        alt="Mostrar Favoritos"
-                      />
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => toggleFav(item?.id)}
-                      disabled={favoritos.length >= 5}
+                <div className="hero-card" key={item?.id}>
+                  <li>
+                    <Link
+                      to="#"
+                      onClick={() => navigate(`/character/${item?.id}`)}
                     >
-                      <img
-                        src="/assets/icones/heart/Path Copy 2@1,5x.svg"
-                        alt="Mostrar Favoritos"
-                      />
-                    </button>
-                  )}
-                </li>
+                      <div className="card-img">
+                        <img
+                          src={`${item?.thumbnail?.path}.${item?.thumbnail?.extension}`}
+                          alt={`${item?.name}`}
+                        />
+                      </div>
+                    </Link>
+                    <div className="card-footer">
+                      <span>{item?.name}</span>
+                      {favoritos.includes(item?.id) ? (
+                        <button onClick={() => toggleFav(item?.id)}>
+                          <img
+                            src="/assets/icones/heart/Path.svg"
+                            alt="Mostrar Favoritos"
+                          />
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => toggleFav(item?.id)}
+                          disabled={favoritos.length >= 5}
+                        >
+                          <img
+                            src="/assets/icones/heart/Path Copy 2@1,5x.svg"
+                            alt="Mostrar Favoritos"
+                          />
+                        </button>
+                      )}
+                    </div>
+                  </li>
+                </div>
               ))}
             </ul>
           ) : (

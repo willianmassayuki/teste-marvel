@@ -1,6 +1,8 @@
 @use "./variables";
 
-p {
-  color: variables.$sec-text;
-  font-weight: 500;
+.app {
+  p {
+    color: variables.$sec-text;
+    font-weight: 500;
+  }
 }

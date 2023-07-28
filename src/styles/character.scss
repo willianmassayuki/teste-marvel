@@ -1,0 +1,48 @@
+@use "../styles/variables";
+@use "../styles/mixins";
+
+.alt-header {
+  @include mixins.center(row, space-between);
+  gap: 2rem;
+  margin: 0 150px;
+  padding: 2rem 0;
+  .top-logo {
+    width: 250px;
+  }
+
+  .searchbar {
+    margin-bottom: 0;
+    background-color: #fff;
+
+    input::placeholder {
+      color: variables.$sec-text;
+    }
+  }
+}
+
+.body-container {
+  height: 90vh;
+  margin: 0 200px;
+
+  .upper-container {
+    background-color: aqua;
+    @include mixins.center(row, space-between);
+
+    .left-container {
+      width: 400px;
+      background-color: aquamarine;
+    }
+
+    .pic-container {
+      background-color: aquamarine;
+    }
+  }
+
+  .bottom-container {
+    background-color: beige;
+    .title-container {
+    }
+    .launch-cards {
+    }
+  }
+}
