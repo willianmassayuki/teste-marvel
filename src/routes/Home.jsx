@@ -5,6 +5,7 @@ import SearchInput from "../components/SearchInput";
 import { useState, useEffect } from "react";
 import api from "../services/api";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import Footer from "../components/Footer";
 
 const Home = () => {
   //Para navegar até a página /character
@@ -193,6 +194,7 @@ const Home = () => {
           )}
         </div>
       </div>
+      <Footer />
     </>
   );
 };

@@ -24,7 +24,7 @@
 
     @media screen and (max-width: variables.$m-size) {
       flex-direction: column-reverse;
-      align-items: end;
+      align-items: center;
       gap: 1rem;
       width: 100%;
     }
@@ -66,17 +66,21 @@
     flex-direction: column;
     ul {
       display: grid;
-      grid-template-columns: repeat(4, 360px);
+      grid-template-columns: repeat(4, 200px);
       gap: 1.5rem;
-      @media screen and (max-width: variables.$l-size) {
-        grid-template-columns: repeat(3, 360px);
+      @media screen and (max-width: variables.$m-size) {
+        grid-template-columns: repeat(2, 200px);
       }
+      @media screen and (max-width: variables.$sm-size) {
+        grid-template-columns: repeat(1, 300px);
+      }
+      /*
       @media screen and (max-width: variables.$lm-size) {
-        grid-template-columns: repeat(2, 360px);
+        grid-template-columns: repeat(4, 360px);
       }
       @media screen and (max-width: variables.$m-size) {
         grid-template-columns: repeat(1, 320px);
-      }
+      }*/
 
       .hero-card {
         width: 100%;
@@ -89,9 +93,12 @@
           height: 100%;
           .card-img {
             width: 100%;
-            height: 350px;
+            height: 200px;
             margin-bottom: 1rem;
             overflow: hidden;
+            @media screen and (max-width: variables.$sm-size) {
+              height: 300px;
+            }
             img {
               border-bottom: 0.25rem solid variables.$primary-color;
               width: 100%;
