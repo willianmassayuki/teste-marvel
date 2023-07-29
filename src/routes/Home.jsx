@@ -4,7 +4,7 @@ import Header from "../components/Header";
 import SearchInput from "../components/SearchInput";
 import { useState, useEffect } from "react";
 import api from "../services/api";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 
 const Home = () => {
@@ -20,7 +20,7 @@ const Home = () => {
   //Controle de ordenação
   const [ordemAlfabetica, setOrdemAlfabetica] = useState(true);
   const [favoritos, setFavoritos] = useState([]);
-  const [mostraFavoritos, setMostraFavoritos] = useState(true);
+  const [mostraFavoritos, setMostraFavoritos] = useState(false);
 
   //Muda o sentido da ordem alfabética
   function mudaOrdem() {
@@ -58,10 +58,6 @@ const Home = () => {
 
   // Carrega sempre que o text sofrer uma alteração
   useEffect(() => {
-    ///Fazer uma condicional para caso o mostraFavoritos for TRUE para que
-    //seja feita uma requisição com BASE em cada ID presente dentro do array favoritos
-    ///e Somar ao estado dados, de forma que no final tenha dados com todos os personagens marcados como favorito
-
     if (mostraFavoritos && favoritos.length > 0) {
       // Criar uma função assíncrona para poder usar o await na chamada da API
       async function fetchFavoritosData() {
@@ -82,9 +78,6 @@ const Home = () => {
               results: [...favoritosData.map((item) => item.data.results[0])],
             },
           }));
-          console.log(dados);
-          //setDados(favoritosData);
-          //console.log(favoritosData[0].data?.results);
         } catch (error) {
           console.error(
             "Ops! Ocorreu um erro ao obter dados de favoritos:",
@@ -113,6 +106,7 @@ const Home = () => {
         });
     }
   }, [text, ordemAlfabetica, mostraFavoritos]);
+
   return (
     <>
       <Header />

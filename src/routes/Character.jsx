@@ -10,8 +10,6 @@ const Character = () => {
   const characterId = location.pathname.split("/")[2]; // Obtém o ID do personagem da URL
   const [characterData, setCharacterData] = useState(null);
   const [comics, setComics] = useState(null);
-
-  //Refatorar
   const [text, setText] = useState("");
   const [favoritos, setFavoritos] = useState([]);
 
@@ -23,7 +21,7 @@ const Character = () => {
     const year = date.getFullYear().toString();
     return `${day}-${month}-${year}`;
   }
-  // Refatorar
+
   // Adiciona ou retira um id e personagem da lista de favoritos
   function toggleFav(id) {
     if (favoritos.includes(id)) {
@@ -49,7 +47,6 @@ const Character = () => {
   // Traz os dados do personagem específico
   useEffect(() => {
     api
-      ///.get(`characters/${characterId}`)
       .get(`characters/${characterId}`, {
         params: {
           limit: 10,
@@ -80,9 +77,6 @@ const Character = () => {
 
       async function fetchComicsData() {
         try {
-          // Inicializar um array para guardar os dados de comics
-          const comicsData = [];
-          //get(`comics?orderBy=onsaleDate&limit=10`);
           const response = await api.get(`comics?`, {
             params: {
               orderBy: "-onsaleDate",
@@ -97,7 +91,6 @@ const Character = () => {
           );
         }
       }
-
       fetchComicsData();
     }
   }, [characterData]);
@@ -124,28 +117,24 @@ const Character = () => {
               <div className="left-container">
                 <div className="left-container-title">
                   <h1>{characterData.name}</h1>
-
-                  {
-                    //Refatorar
-                    favoritos.includes(characterData?.id) ? (
-                      <button onClick={() => toggleFav(characterData?.id)}>
-                        <img
-                          src="/assets/icones/heart/Path.svg"
-                          alt="Mostrar Favoritos"
-                        />
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => toggleFav(characterData?.id)}
-                        disabled={favoritos.length >= 5}
-                      >
-                        <img
-                          src="/assets/icones/heart/Path Copy 2@1,5x.svg"
-                          alt="Mostrar Favoritos"
-                        />
-                      </button>
-                    )
-                  }
+                  {favoritos.includes(characterData?.id) ? (
+                    <button onClick={() => toggleFav(characterData?.id)}>
+                      <img
+                        src="/assets/icones/heart/Path.svg"
+                        alt="Mostrar Favoritos"
+                      />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => toggleFav(characterData?.id)}
+                      disabled={favoritos.length >= 5}
+                    >
+                      <img
+                        src="/assets/icones/heart/Path Copy 2@1,5x.svg"
+                        alt="Mostrar Favoritos"
+                      />
+                    </button>
+                  )}
                 </div>
                 <p>
                   {characterData.description &&
@@ -164,7 +153,6 @@ const Character = () => {
                       <span>{characterData.comics.available}</span>
                     </div>
                   </div>
-
                   <div className="description-item">
                     <h4>Series</h4>
                     <div className="info-item">
@@ -212,20 +200,12 @@ const Character = () => {
                 <p>Carregando</p>
               )}
             </div>
-            {/*comics.data?.results?.map((data) => (
-              <div className="launch-card" key={data?.id}>
-                <p>{data?.title}</p>
-                <img
-                  src={`${data?.thumbnail?.path}.${data?.thumbnail?.extension}`}
-                  alt={`${data?.title}`}
-                />
-              </div>
-            ))*/}
           </div>
         </>
       ) : (
         <h3>Carregando...</h3>
       )}
+      <Footer />
     </div>
   );
 };

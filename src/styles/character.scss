@@ -7,6 +7,7 @@
     @include mixins.center(row, space-between);
     @media screen and (max-width: variables.$m-size) {
       flex-direction: column;
+      margin: 0 30px;
     }
     gap: 2rem;
     margin: 0 150px;
@@ -27,16 +28,16 @@
   }
 
   .body-container {
-    height: 90vh;
     margin: 0 200px;
-    @media screen and (max-width: variables.$lm-size) {
-      margin: 0 100px;
+    overflow: hidden;
+    @media screen and (max-width: variables.$m-size) {
+      margin: 0 30px;
     }
 
     .upper-container {
       position: relative;
       margin-bottom: 3rem;
-      height: 100vh;
+      height: auto;
 
       @include mixins.center(row, space-between);
       gap: 2rem;
@@ -130,8 +131,11 @@
 
       .pic-container {
         width: 50%;
+        min-width: 300px;
         overflow: hidden;
-
+        @media screen and (max-width: variables.$m-size) {
+          width: 40%;
+        }
         img {
           width: 100%;
           border-radius: 0.5rem;
@@ -163,7 +167,7 @@
         grid-template-columns: repeat(4, 180px);
       }
       @media screen and (max-width: variables.$m-size) {
-        grid-template-columns: repeat(3, 180px);
+        grid-template-columns: repeat(2, 180px);
       }
       @media screen and (max-width: variables.$sm-size) {
         grid-template-columns: 180px;
@@ -172,7 +176,8 @@
       .comic-card {
         position: relative;
         z-index: 5;
-        width: 150px;
+        min-width: 150px;
+        width: 100%;
         margin-bottom: 1rem;
         img {
           width: 100%;
