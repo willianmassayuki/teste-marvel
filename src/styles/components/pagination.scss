@@ -1,0 +1,19 @@
+@use "../variables";
+@use "../mixins";
+
+.pagination {
+  li {
+    display: inline;
+    list-style: none;
+    margin: 1rem;
+
+    button {
+      font-weight: 700;
+    }
+
+    .currentPage {
+      color: variables.$primary-color;
+      cursor: default;
+    }
+  }
+}

@@ -4,8 +4,12 @@ import Header from "../components/Header";
 import SearchInput from "../components/SearchInput";
 import { useState, useEffect } from "react";
 import api from "../services/api";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import Pagination from "../components/Pagination";
 import Footer from "../components/Footer";
+
+//Limite de itens por página
+const limit = 20;
 
 const Home = () => {
   //Para navegar até a página /character
@@ -14,6 +18,10 @@ const Home = () => {
   //Texto pesquisado
   const [text, setText] = useState("");
 
+  const location = useLocation();
+  // Obtém o texto de busca da URL
+  const searchText = location.pathname.split("/")[2];
+
   //Dados da API
   const [dados, setDados] = useState(null);
 
@@ -21,6 +29,9 @@ const Home = () => {
   const [ordemAlfabetica, setOrdemAlfabetica] = useState(true);
   const [favoritos, setFavoritos] = useState([]);
   const [mostraFavoritos, setMostraFavoritos] = useState(false);
+
+  //Paginação offset
+  const [offset, setOffset] = useState(0);
 
   //Muda o sentido da ordem alfabética
   function mudaOrdem() {
@@ -93,7 +104,8 @@ const Home = () => {
           params: {
             nameStartsWith: text ? `${text}` : null,
             orderBy: ordemAlfabetica ? "name" : "-name",
-            limit: 20,
+            limit: limit,
+            offset: offset,
           },
         })
 
@@ -105,7 +117,14 @@ const Home = () => {
           console.error("ops! ocorreu um erro" + err);
         });
     }
-  }, [text, ordemAlfabetica, mostraFavoritos]);
+  }, [ordemAlfabetica, mostraFavoritos, text, offset]);
+
+  //No primeiro carregamento fazer o text ser igual ao searchText
+  //Caso seja uma string vazia, a página carrega de forma padrão
+  useEffect(() => {
+    if (searchText) setText(searchText);
+    console.log("Passou por aqui");
+  }, []);
 
   return (
     <>
@@ -187,6 +206,13 @@ const Home = () => {
             <h3>Carregando...</h3>
           )}
         </div>
+
+        <Pagination
+          limitItems={limit}
+          totalItems={dados?.data?.total}
+          offset={offset}
+          setOffset={setOffset}
+        />
       </div>
       <Footer />
     </>

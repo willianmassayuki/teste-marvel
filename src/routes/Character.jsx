@@ -22,6 +22,11 @@ const Character = () => {
     return `${day}-${month}-${year}`;
   }
 
+  // Mandar para a página principal iniciada com uma busca
+  function handleSearch() {
+    console.log(text);
+  }
+
   // Adiciona ou retira um id e personagem da lista de favoritos
   function toggleFav(id) {
     if (favoritos.includes(id)) {
