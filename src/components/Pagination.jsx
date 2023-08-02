@@ -1,6 +1,6 @@
 import "../styles/components/pagination.scss";
 // Número total de botões
-const MAX_ITEMS = 9;
+const MAX_ITEMS = 5;
 // Botões à esquerda
 const MAX_LEFT = (MAX_ITEMS - 1) / 2;
 

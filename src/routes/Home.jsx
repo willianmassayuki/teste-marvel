@@ -5,13 +5,21 @@ import SearchInput from "../components/SearchInput";
 import { useState, useEffect } from "react";
 import api from "../services/api";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Pagination from "../components/Pagination";
+import Pagination from "../components/pagination";
 import Footer from "../components/Footer";
+import BackTop from "../components/BackTop";
 
 //Limite de itens por página
 const limit = 20;
 
 const Home = () => {
+  const forceUpdate = useForceUpdate();
+
+  function useForceUpdate() {
+    const [, setToggle] = useState(false);
+    return () => setToggle((toggle) => !toggle);
+  }
+
   //Para navegar até a página /character
   const navigate = useNavigate();
 
@@ -20,7 +28,7 @@ const Home = () => {
 
   const location = useLocation();
   // Obtém o texto de busca da URL
-  const searchText = location.pathname.split("/")[2];
+  let searchText = location.pathname.split("/")[2];
 
   //Dados da API
   const [dados, setDados] = useState(null);
@@ -64,7 +72,6 @@ const Home = () => {
   //Atualização do localstorage toda vez que favoritos for alterado
   useEffect(() => {
     localStorage.setItem("favoritos", JSON.stringify(favoritos));
-    console.log(favoritos);
   }, [favoritos]);
 
   // Carrega sempre que o text sofrer uma alteração
@@ -108,10 +115,11 @@ const Home = () => {
             offset: offset,
           },
         })
-
         .then((response) => {
           setDados(response.data);
-          console.log(dados);
+          console.log(`Text ${text}`);
+          console.log(`Search text ${searchText}`);
+          forceUpdate();
         })
         .catch((err) => {
           console.error("ops! ocorreu um erro" + err);
@@ -122,14 +130,25 @@ const Home = () => {
   //No primeiro carregamento fazer o text ser igual ao searchText
   //Caso seja uma string vazia, a página carrega de forma padrão
   useEffect(() => {
-    if (searchText) setText(searchText);
-    console.log("Passou por aqui");
+    if (searchText) {
+      setText(searchText);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (searchText) {
+      setText(searchText);
+    }
   }, []);
 
   return (
     <>
       <Header />
-      <SearchInput value={text} onChange={(search) => setText(search)} />
+      <SearchInput
+        value={text}
+        onChange={(search) => setText(search)}
+        searchText={searchText}
+      />
       <div className="main-container">
         <div className="actions-container">
           <p>Encontrados {dados?.data?.results?.length} heróis</p>
@@ -138,7 +157,9 @@ const Home = () => {
               src="/assets/icones/heroi/noun_Superhero_2227044@1,5x.svg"
               alt="Hero icon"
             />
-            <span>Ordenar por nome - A/Z</span>
+            <span className="central-span">
+              <span className="desktop">Ordenar por nome -</span> A/Z
+            </span>
             {ordemAlfabetica ? (
               <img src="/assets/toggle/Group 6@1,5x.svg" alt="A a Z Toggle" />
             ) : (
@@ -214,6 +235,7 @@ const Home = () => {
           setOffset={setOffset}
         />
       </div>
+      <BackTop />
       <Footer />
     </>
   );

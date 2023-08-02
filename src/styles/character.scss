@@ -8,6 +8,10 @@
     @media screen and (max-width: variables.$m-size) {
       flex-direction: column;
       margin: 0 30px;
+
+      .searchbar img {
+        margin: 0 1rem;
+      }
     }
     gap: 2rem;
     margin: 0 150px;
@@ -28,7 +32,7 @@
   }
 
   .body-container {
-    margin: 0 200px;
+    margin: 0 100px;
     overflow: hidden;
     @media screen and (max-width: variables.$m-size) {
       margin: 0 30px;

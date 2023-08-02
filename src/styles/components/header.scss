@@ -19,4 +19,9 @@
       font-size: 1.5rem;
     }
   }
+  @media screen and (max-width: variables.$m-size) {
+    :first-child {
+      scale: 0.75;
+    }
+  }
 }

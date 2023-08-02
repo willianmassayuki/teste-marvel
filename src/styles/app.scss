@@ -6,3 +6,9 @@
     font-weight: 500;
   }
 }
+
+@media screen and (max-width: variables.$m-size) {
+  .desktop {
+    display: none;
+  }
+}

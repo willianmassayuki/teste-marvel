@@ -1,0 +1,17 @@
+@use "../variables";
+
+.back-top {
+  position: fixed;
+  bottom: 20px;
+  right: 10px;
+  opacity: 50%;
+
+  button {
+    background-color: transparent;
+    border: none;
+    outline: 0;
+    cursor: pointer;
+    font-size: 2rem;
+    color: variables.$primary-color;
+  }
+}

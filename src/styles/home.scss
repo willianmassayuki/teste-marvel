@@ -3,7 +3,7 @@
 
 .main-container {
   @include mixins.center(column, space-between);
-  margin: 0 8rem 4rem 8rem;
+  margin-bottom: 3rem;
   min-height: 60vh;
   @media screen and (max-width: variables.$m-size) {
     margin: 0 2rem 2rem 2rem;
@@ -20,7 +20,8 @@
   .actions-container {
     @include mixins.center(row, none);
     margin-bottom: 3rem;
-    width: 80%;
+    max-width: 850px;
+    width: 100%;
 
     @media screen and (max-width: variables.$m-size) {
       flex-direction: column-reverse;
@@ -42,6 +43,16 @@
       align-items: center;
       margin-left: 2rem;
       color: variables.$primary-color;
+      @media screen and (max-width: variables.$m-size) {
+        margin: 0;
+        img {
+          margin: 0;
+        }
+
+        .central-span {
+          margin: 0 1rem;
+        }
+      }
 
       &:hover {
         cursor: pointer;
