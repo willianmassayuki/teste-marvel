@@ -1,4 +1,4 @@
-import "../styles/components/BackTop.scss";
+import "../styles/components/backTop.scss";
 import { BiArrowToTop } from "react-icons/bi";
 
 const BackTop = () => {
