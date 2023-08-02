@@ -1,10 +1,9 @@
 import "../styles/home.scss";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import SearchInput from "../components/SearchInput";
-import { useState, useEffect } from "react";
 import api from "../services/api";
-import { Link, useLocation, useNavigate } from "react-router-dom";
 import Pagination from "../components/pagination";
 import Footer from "../components/Footer";
 import BackTop from "../components/BackTop";
@@ -13,22 +12,16 @@ import BackTop from "../components/BackTop";
 const limit = 20;
 
 const Home = () => {
-  const forceUpdate = useForceUpdate();
-
-  function useForceUpdate() {
-    const [, setToggle] = useState(false);
-    return () => setToggle((toggle) => !toggle);
-  }
-
   //Para navegar até a página /character
   const navigate = useNavigate();
 
-  //Texto pesquisado
-  const [text, setText] = useState("");
-
   const location = useLocation();
+
   // Obtém o texto de busca da URL
   let searchText = location.pathname.split("/")[2];
+
+  //Texto pesquisado
+  const [text, setText] = useState(searchText ? `${searchText}` : "");
 
   //Dados da API
   const [dados, setDados] = useState(null);
@@ -65,7 +58,6 @@ const Home = () => {
     const dadosArmazenados = localStorage.getItem("favoritos");
     if (dadosArmazenados) {
       setFavoritos(JSON.parse(dadosArmazenados));
-      console.log(dadosArmazenados);
     }
   }, []);
 
@@ -117,29 +109,12 @@ const Home = () => {
         })
         .then((response) => {
           setDados(response.data);
-          console.log(`Text ${text}`);
-          console.log(`Search text ${searchText}`);
-          forceUpdate();
         })
         .catch((err) => {
           console.error("ops! ocorreu um erro" + err);
         });
     }
   }, [ordemAlfabetica, mostraFavoritos, text, offset]);
-
-  //No primeiro carregamento fazer o text ser igual ao searchText
-  //Caso seja uma string vazia, a página carrega de forma padrão
-  useEffect(() => {
-    if (searchText) {
-      setText(searchText);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (searchText) {
-      setText(searchText);
-    }
-  }, []);
 
   return (
     <>
