@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import SearchInput from "../components/SearchInput";
 import api from "../services/api";
-import Pagination from "../components/pagination";
+import Pagination from "../components/Pagination";
 import Footer from "../components/Footer";
 import BackTop from "../components/BackTop";
 
